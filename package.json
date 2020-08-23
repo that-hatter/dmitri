@@ -1,0 +1,14 @@
+{
+  "name": "dmitri",
+  "version": "1.0.0",
+  "description": "A simple Discord bot for displaying chemistry stuff.",
+  "main": "dmitri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "that-hatter",
+  "license": "ISC",
+  "dependencies": {
+    "eris": "^0.13.3"
+  }
+}
