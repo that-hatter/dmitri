@@ -5,7 +5,7 @@ import * as util from "../modules/util"
 
 const names = ["help"];
 const desc = `Explains what a command does and how to use it, along with its aliases and examples. You can view a list of available commands using \`${ config.prefix }commands\`.`;
-const usage = ["COMMAND"];
+const usage = ["COMMAND", "Here __COMMAND__ can be the actual name of the command, or any of its aliases."];
 
 const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
   const cmdName: string = args[0] || "help";
@@ -23,6 +23,7 @@ const func = async (args: string[], msg: Message, client: Client): Promise<Messa
         `,
     }
   });
+  
 }
 
 export const help = new Command(names, desc, func, usage);

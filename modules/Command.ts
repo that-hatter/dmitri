@@ -45,9 +45,11 @@ export class Command {
     }
 
     if (this.names.length > 1) {
+      const aliases = [...this.names];
+      aliases.shift();
       embedFields.push({
         name: "Aliases:", 
-        value: this.names.map(nm => `\`${ nm }\``).join(", ").slice(this.names.length + 4),
+        value: aliases.map(nm => `\`${ config.prefix + nm }\``).join(", "),
         inline: false 
       })
     }

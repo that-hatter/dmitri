@@ -19,8 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = exports.colorOf = exports.getCommand = void 0;
-var elements = __importStar(require("../data/elements.json"));
+exports.colorOf = exports.getCommand = void 0;
 var config = __importStar(require("../config.json"));
 var index_1 = require("../commands/index");
 exports.getCommand = function (cmdName) {
@@ -28,22 +27,4 @@ exports.getCommand = function (cmdName) {
 };
 exports.colorOf = function (type) {
     return Number(config.colors[type]) || 0x808080;
-};
-exports.getElementWithName = function (name) {
-    return elements[name];
-};
-exports.getElementWithProp = function (prop, val) {
-    for (var e in elements) {
-        var element = elements[e];
-        var propVal = element[prop];
-        if (typeof propVal === "string")
-            propVal = propVal.toLowerCase();
-        if (propVal === val)
-            return element;
-    }
-};
-exports.getElementByQuery = function (query) {
-    return isNaN(Number(query))
-        ? exports.getElementWithName(query) || exports.getElementWithProp("symbol", query)
-        : exports.getElementWithProp("number", Number(query));
 };

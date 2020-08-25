@@ -55,32 +55,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.help = void 0;
+exports.full = void 0;
 var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
 var util = __importStar(require("../modules/util"));
-var names = ["help"];
-var desc = "Explains what a command does and how to use it, along with its aliases and examples. You can view a list of available commands using `" + config.prefix + "commands`.";
-var usage = ["COMMAND", "Here __COMMAND__ can be the actual name of the command, or any of its aliases."];
+var table = __importStar(require("../modules/tableQuery"));
+var elemEmbed = function (element) {
+    var fetch = function (prop) { return table.getProperty(element, prop); };
+    var rsclink = "https://www.rsc.org/periodic-table/element/" + fetch("number");
+    var pbclink = "https://pubchem.ncbi.nlm.nih.gov/element/" + fetch("number");
+    var nistlink = "https://webbook.nist.gov/cgi/inchi/InChI%3D1S/" + fetch("symbol");
+    return {
+        embed: {
+            title: fetch("number") + " | " + fetch("name") + " (" + fetch("symbol") + ")",
+            url: fetch("source"),
+            color: util.colorOf(fetch("category")),
+            description: "**Mass**: " + fetch("atomic_mass") + " | **Phase at STP**: " + fetch("phase") + "\n"
+                + ("**Period**: " + fetch("period") + " | **Group**: " + fetch("group") + " | **Block**: " + fetch("block") + "\n")
+                + ("**Density**: " + fetch("density") + "\n")
+                + ("**Category**: " + fetch("category") + "\n")
+                + ("**Discovered By**: " + fetch("discovered_by") + "\n")
+                + ("**Named by**: " + fetch("named by") + "\n")
+                + ("**Boiling Point**: " + fetch("boil") + "\n")
+                + ("**Melting Point**: " + fetch("melt") + "\n")
+                + ("**Molar Heat**: " + fetch("molar_heat") + "\n")
+                + ("**Electron Shells**: " + fetch("shells") + "\n")
+                + ("**Electronegativity**: " + fetch("electronegativity_pauling") + "\n")
+                + ("**Electron Affinity**: " + fetch("element.electron_affinity") + "\n")
+                + ("**Ionization Energies**: " + fetch("ionization_energies") + "\n\n")
+                + ("**Learn more:** [RSC](" + rsclink + ") | [PubChem](" + pbclink + ") | [NIST](" + nistlink + ")"),
+            footer: {
+                icon_url: "https://png2.cleanpng.com/dy/f813124283957a3eff8114177b2eda08/L0KzQYm3U8E4N5xpfZH0aYP2gLBuTfVtbZR5itH3LX3sc8P2kBNweJYyeeZ4bT3mfLr3TfFzfF5qhNdsdILyfn7qjPlxaaN5i58AYXHncrfohcE5aZVrSJC5NEO1QoiCV8E2OmI4S6g7M0i0QIK4TwBvbz==/kisspng-electron-microscope-atom-clip-art-electron-cliparts-5aadbfae18adf0.0432279715213362381011.png",
+                text: fetch("electron_configuration"),
+            }
+        }
+    };
+};
+var names = ["full", config.prefix + config.prefix];
+var desc = "Displays a more compact and extensive information regarding an element without the image and summary.";
+var usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var cmdName, cmd;
+    var element;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                cmdName = args[0] || "help";
-                cmd = util.getCommand(cmdName);
-                if (!cmd) return [3 /*break*/, 2];
-                return [4 /*yield*/, cmd.showHelp(msg)];
+                if (args.length < 1)
+                    return [2 /*return*/];
+                element = table.getElementByQuery(args[0]);
+                return [4 /*yield*/, msg.channel.createMessage(element ? elemEmbed(element) : {
+                        // error message if element is not found
+                        embed: {
+                            color: util.colorOf("help"),
+                            title: "Element not found.",
+                            description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                        }
+                    })];
             case 1: return [2 /*return*/, _a.sent()];
-            case 2: return [4 /*yield*/, msg.channel.createMessage({
-                    embed: {
-                        color: util.colorOf("help"),
-                        title: "Command not found:",
-                        description: "\n        I have no commands named `" + args[0] + "`. \n        You can view the list of my available commands using `" + config.prefix + "commands`.\n        ",
-                    }
-                })];
-            case 3: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.help = new Command_1.Command(names, desc, func, usage);
+exports.full = new Command_1.Command(names, desc, func, usage);

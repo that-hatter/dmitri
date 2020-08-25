@@ -1,23 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -55,32 +36,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.help = void 0;
+exports.hello = void 0;
 var Command_1 = require("../modules/Command");
-var config = __importStar(require("../config.json"));
-var util = __importStar(require("../modules/util"));
-var names = ["help"];
-var desc = "Explains what a command does and how to use it, along with its aliases and examples. You can view a list of available commands using `" + config.prefix + "commands`.";
-var usage = ["COMMAND", "Here __COMMAND__ can be the actual name of the command, or any of its aliases."];
+var names = ["hello"];
+var desc = "Added because of <@492913557277769729>.";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var cmdName, cmd;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                cmdName = args[0] || "help";
-                cmd = util.getCommand(cmdName);
-                if (!cmd) return [3 /*break*/, 2];
-                return [4 /*yield*/, cmd.showHelp(msg)];
+            case 0: return [4 /*yield*/, msg.channel.createMessage("Hi!")];
             case 1: return [2 /*return*/, _a.sent()];
-            case 2: return [4 /*yield*/, msg.channel.createMessage({
-                    embed: {
-                        color: util.colorOf("help"),
-                        title: "Command not found:",
-                        description: "\n        I have no commands named `" + args[0] + "`. \n        You can view the list of my available commands using `" + config.prefix + "commands`.\n        ",
-                    }
-                })];
-            case 3: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.help = new Command_1.Command(names, desc, func, usage);
+exports.hello = new Command_1.Command(names, desc, func);

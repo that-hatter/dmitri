@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -54,83 +67,40 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Command = void 0;
+exports.PropertyCommand = void 0;
+var Command_1 = require("./Command");
 var util = __importStar(require("./util"));
-var config = __importStar(require("../config.json"));
-var Command = /** @class */ (function () {
-    function Command(names, desc, func, usage) {
-        this.names = names;
-        this.desc = desc;
-        this.func = func;
-        this.usage = usage;
+var table = __importStar(require("./tableQuery"));
+var PropertyCommand = /** @class */ (function (_super) {
+    __extends(PropertyCommand, _super);
+    function PropertyCommand(names, label, elemProp) {
+        var _this = this;
+        var func = function (args, msg, client) { return __awaiter(_this, void 0, void 0, function () {
+            var element;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (args.length < 1)
+                            return [2 /*return*/];
+                        element = table.getElementByQuery(args[0]);
+                        return [4 /*yield*/, msg.channel.createMessage(element ? "**" + element.name + "** | " + label + ": " + table.getProperty(element, elemProp) :
+                                {
+                                    embed: {
+                                        color: util.colorOf("help"),
+                                        title: "Element not found.",
+                                        description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                                    }
+                                })];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); };
+        var desc = "Gives the specified element's **" + label + "**.";
+        var usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
+        _this = _super.call(this, names, desc, func, usage) || this;
+        return _this;
     }
-    Command.prototype.exec = function (args, msg, client) {
-        return __awaiter(this, void 0, void 0, function () {
-            var err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.func(args, msg, client)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Command.prototype.showHelp = function (msg) {
-        return __awaiter(this, void 0, void 0, function () {
-            var label, embedFields, val, i, aliases;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        label = this.names[0];
-                        embedFields = [];
-                        if (this.usage) {
-                            val = "`" + (config.prefix + label) + " " + this.usage[0] + "`";
-                            for (i = 1; i < this.usage.length; i++) {
-                                val += "\n" + this.usage[i];
-                            }
-                            embedFields.push({
-                                name: "Usage:",
-                                value: val,
-                                inline: false
-                            });
-                        }
-                        if (this.names.length > 1) {
-                            aliases = __spreadArrays(this.names);
-                            aliases.shift();
-                            embedFields.push({
-                                name: "Aliases:",
-                                value: aliases.map(function (nm) { return "`" + (config.prefix + nm) + "`"; }).join(", "),
-                                inline: false
-                            });
-                        }
-                        return [4 /*yield*/, msg.channel.createMessage({
-                                embed: {
-                                    color: util.colorOf("help"),
-                                    title: "__" + (config.prefix + label) + "__",
-                                    description: this.desc,
-                                    fields: embedFields
-                                }
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return Command;
-}());
-exports.Command = Command;
+    return PropertyCommand;
+}(Command_1.Command));
+exports.PropertyCommand = PropertyCommand;
