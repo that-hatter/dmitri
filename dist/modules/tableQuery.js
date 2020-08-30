@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getList = exports.isPassAllFilters = exports.filterCheck = exports.getProperty = exports.getBlock = exports.getGroup = exports.getPropUnit = exports.getMaxZ = exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = void 0;
+exports.getList = exports.isPassAllFilters = exports.filterCheck = exports.parseFilters = exports.getProperty = exports.getBlock = exports.getGroup = exports.getPropUnit = exports.getMaxZ = exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = void 0;
 //=========================================================//
 // List of functions used to query the periodic table json
 // Might convert it to a PeriodicTable class in the future, 
@@ -107,6 +107,38 @@ exports.getProperty = function (elem, prop) {
 //=========================================================//
 // Filtering and listing
 //=========================================================//
+var keywords = {
+    "category": "category",
+    "phase": "phase",
+    "block": "block",
+    "period": "period",
+    "group": "group",
+    "mass": "atomic_mass",
+    "num": "number",
+    "neg": "electronegativity_pauling",
+    "aff": "electron_affinity",
+    "den": "density",
+    "bp": "boil",
+    "mp": "melt",
+    "heat": "heat"
+};
+var rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
+exports.parseFilters = function (args) {
+    var _a;
+    var filterStrings = args.join(" ").split(",");
+    var filters = [];
+    for (var _i = 0, filterStrings_1 = filterStrings; _i < filterStrings_1.length; _i++) {
+        var f = filterStrings_1[_i];
+        var _b = f.split("="), key = _b[0], val = _b[1];
+        _a = [key ? key.trim() : "", val ? val.trim() : ""], key = _a[0], val = _a[1];
+        filters.push({
+            property: keywords[key],
+            value: val,
+            range: rangeables.includes(key) && val.includes("to")
+        });
+    }
+    return filters;
+};
 exports.filterCheck = function (filter, element) {
     var val = exports.getProperty(element, filter.property);
     if (filter.range && val && !isNaN(Number(val))) {
@@ -133,8 +165,9 @@ exports.getList = function (filters) {
     var out = [];
     for (var k in elements) {
         var element = elements[k];
-        if (exports.isPassAllFilters(filters, element))
+        if (filters.length < 1 || exports.isPassAllFilters(filters, element)) {
             out.push(element);
+        }
     }
     return out;
 };

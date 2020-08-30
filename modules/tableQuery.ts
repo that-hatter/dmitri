@@ -97,6 +97,40 @@ export const getProperty = (elem: Element, prop: string): string => {
 // Filtering and listing
 //=========================================================//
 
+const keywords: { [key: string]: string } = {
+  "category": "category",
+  "phase": "phase",
+  "block": "block",
+  "period": "period",
+  "group": "group",
+  "mass": "atomic_mass",
+  "num": "number", 
+  "neg": "electronegativity_pauling",
+  "aff": "electron_affinity",
+  "den": "density",
+  "bp": "boil", 
+  "mp": "melt",
+  "heat": "heat"
+}
+
+const rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
+
+export const parseFilters = (args: string[]): Filter[] => {
+  const filterStrings = args.join(" ").split(",");
+  const filters: Filter[] = [];
+  for (const f of filterStrings) {
+    let [key, val] = f.split("=");
+    [key, val] = [key ? key.trim() : "", val ? val.trim() : ""];
+    filters.push({
+      property: keywords[key],
+      value: val,
+      range: rangeables.includes(key) && val.includes("to")
+    });
+  }
+
+  return filters;
+}
+
 export const filterCheck = (filter: Filter, element: Element): boolean => {
   let val = getProperty(element, filter.property);
 
@@ -124,7 +158,9 @@ export const getList = (filters: Filter[]): Element[] => {
   const out: Element[] = [];
   for (const k in elements) {
     const element = elements[k as ElemName];
-    if (isPassAllFilters(filters, element)) out.push(element);
+    if (filters.length < 1 || isPassAllFilters(filters, element)) {
+      out.push(element);
+    }
   }
   return out;
 }

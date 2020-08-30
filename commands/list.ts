@@ -4,24 +4,6 @@ import { basic } from "./basic";
 import * as table from "../modules/tableQuery";
 import * as util from "../modules/util";
 
-const keywords: { [key: string]: string } = {
-  "category": "category",
-  "phase": "phase",
-  "block": "block",
-  "period": "period",
-  "group": "group",
-  "mass": "atomic_mass",
-  "num": "number", 
-  "neg": "electronegativity_pauling",
-  "aff": "electron_affinity",
-  "den": "density",
-  "bp": "boil", 
-  "mp": "melt",
-  "heat": "heat"
-}
-
-const rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
-
 const names = ["list", "filter"];
 const desc = [
   "Lists all the elements that match the given `<filter>`",
@@ -33,46 +15,39 @@ const desc = [
 ];
 const usage = "<keyword> = <value | [min] to [max]>";
 
-const parseFilters = (args: string[]): table.Filter[] => {
-  const filterStrings = args.join(" ").split(",");
-  const filters: table.Filter[] = [];
-  for (const f of filterStrings) {
-    let [key, val] = f.split("=");
-    [key, val] = [key.trim(), val.trim()];
-    filters.push({
-      property: keywords[key],
-      value: val,
-      range: rangeables.includes(key) && val.includes("to")
-    });
-  }
-
-  return filters;
-}
-
 const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
-  if (args.length < 1) return;
-  const filters = parseFilters(args);
+  const filters: table.Filter[] = args.length > 0 ? table.parseFilters(args): [];
   const list = table.getList(filters);
 
-  const filstr = filters.map(f => {
-    const val = f.range ? f.value.split("to").map(x => x.trim()).join(" to ") : f.value;
-    return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
-  }).join(" | ");
+  let listStr = "";
+  for (let i = 0; i < list.length; i++) {
+    if (!list[i].name) continue;
+    listStr += list[i].name;
+    listStr += (" ").repeat(14 - list[i].name.length);
+    if (i % 3 == 2 && i < list.length - 1) listStr += "\n";
+  }
 
   return await msg.channel.createMessage(
     list.length > 0 ? {
       embed: {
         color: util.colorOf("help"),
         title: "List of elements matching your filter:",
-        description: list.map(e => "`" + e.number + " " + e.name + "`").join(" | "),
-        footer: { text: filstr }
+        description: `\`\`\`${ listStr }\`\`\``,
+        footer: { 
+          text: args.length > 0 ? 
+          filters.map(f => {
+            const val = f.range ? f.value.split("to").map(x => x.trim()).join(" to ") : f.value;
+            return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
+          }).join(" | ") : "All elements." 
+        }
       }
     } : {
       embed: {
         color: util.colorOf("help"),
-        title: "Sorry, I found no elements matching this filter:",
-        description: "`" + filstr 
-          + "`\n\nRecheck your query to see if there are any mistakes, or try using a different filter.",
+        title: "No elements found.",
+        description: 
+          "Sorry, I couldn't find an element matching your filter."
+          + " Recheck your query, or try using a different filter.",
       }
     }
   );

@@ -58,14 +58,40 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.rand = void 0;
 var Command_1 = require("../modules/Command");
 var basic_1 = require("./basic");
+var util = __importStar(require("../modules/util"));
 var table = __importStar(require("../modules/tableQuery"));
+var config = __importStar(require("../config.json"));
 var names = ["rand", "random"];
-var desc = ["Gives a random element and its basic information."];
+var desc = [
+    "Gives a random element and its basic information.",
+    "You can use a `[filter]` to limit the elements.",
+    "Filter usage is the same as `" + config.prefix + "list`"
+];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, basic_1.basic.exec([String(Math.floor(Math.random() * table.getMaxZ()))], msg, client)];
-            case 1: return [2 /*return*/, _a.sent()];
+    var filters, list, randEl, _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                filters = args.length > 0 ? table.parseFilters(args) : [];
+                list = table.getList(filters);
+                randEl = list[Math.floor(Math.random() * (list.length - 1))];
+                if (!(list.length > 0)) return [3 /*break*/, 2];
+                return [4 /*yield*/, basic_1.basic.exec([randEl.name.toLowerCase()], msg, client)];
+            case 1:
+                _a = _b.sent();
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, msg.channel.createMessage({
+                    embed: {
+                        color: util.colorOf("help"),
+                        title: "No elements found.",
+                        description: "Sorry, I couldn't find an element matching your filter."
+                            + " Recheck your query, or try using a different filter.",
+                    }
+                })];
+            case 3:
+                _a = _b.sent();
+                _b.label = 4;
+            case 4: return [2 /*return*/, _a];
         }
     });
 }); };

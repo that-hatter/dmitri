@@ -59,22 +59,6 @@ exports.list = void 0;
 var Command_1 = require("../modules/Command");
 var table = __importStar(require("../modules/tableQuery"));
 var util = __importStar(require("../modules/util"));
-var keywords = {
-    "category": "category",
-    "phase": "phase",
-    "block": "block",
-    "period": "period",
-    "group": "group",
-    "mass": "atomic_mass",
-    "num": "number",
-    "neg": "electronegativity_pauling",
-    "aff": "electron_affinity",
-    "den": "density",
-    "bp": "boil",
-    "mp": "melt",
-    "heat": "heat"
-};
-var rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
 var names = ["list", "filter"];
 var desc = [
     "Lists all the elements that match the given `<filter>`",
@@ -85,48 +69,41 @@ var desc = [
     "`period`, `group`, `category`, `phase`, `block`, `mass`, `num`, `neg`, `aff`, `den`, `mp`, `bp`, `heat`"
 ];
 var usage = "<keyword> = <value | [min] to [max]>";
-var parseFilters = function (args) {
-    var _a;
-    var filterStrings = args.join(" ").split(",");
-    var filters = [];
-    for (var _i = 0, filterStrings_1 = filterStrings; _i < filterStrings_1.length; _i++) {
-        var f = filterStrings_1[_i];
-        var _b = f.split("="), key = _b[0], val = _b[1];
-        _a = [key.trim(), val.trim()], key = _a[0], val = _a[1];
-        filters.push({
-            property: keywords[key],
-            value: val,
-            range: rangeables.includes(key) && val.includes("to")
-        });
-    }
-    return filters;
-};
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var filters, list, filstr;
+    var filters, list, listStr, i;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (args.length < 1)
-                    return [2 /*return*/];
-                filters = parseFilters(args);
+                filters = args.length > 0 ? table.parseFilters(args) : [];
                 list = table.getList(filters);
-                filstr = filters.map(function (f) {
-                    var val = f.range ? f.value.split("to").map(function (x) { return x.trim(); }).join(" to ") : f.value;
-                    return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
-                }).join(" | ");
+                listStr = "";
+                for (i = 0; i < list.length; i++) {
+                    if (!list[i].name)
+                        continue;
+                    listStr += list[i].name;
+                    listStr += (" ").repeat(14 - list[i].name.length);
+                    if (i % 3 == 2 && i < list.length - 1)
+                        listStr += "\n";
+                }
                 return [4 /*yield*/, msg.channel.createMessage(list.length > 0 ? {
                         embed: {
                             color: util.colorOf("help"),
                             title: "List of elements matching your filter:",
-                            description: list.map(function (e) { return "`" + e.number + " " + e.name + "`"; }).join(" | "),
-                            footer: { text: filstr }
+                            description: "```" + listStr + "```",
+                            footer: {
+                                text: args.length > 0 ?
+                                    filters.map(function (f) {
+                                        var val = f.range ? f.value.split("to").map(function (x) { return x.trim(); }).join(" to ") : f.value;
+                                        return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
+                                    }).join(" | ") : "All elements."
+                            }
                         }
                     } : {
                         embed: {
                             color: util.colorOf("help"),
-                            title: "Sorry, I found no elements matching this filter:",
-                            description: "`" + filstr
-                                + "`\n\nRecheck your query to see if there are any mistakes, or try using a different filter.",
+                            title: "No elements found.",
+                            description: "Sorry, I couldn't find an element matching your filter."
+                                + " Recheck your query, or try using a different filter.",
                         }
                     })];
             case 1: return [2 /*return*/, _a.sent()];
