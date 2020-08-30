@@ -64,26 +64,49 @@ bot.on("ready", function () {
 });
 // message handler
 bot.on("messageCreate", function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var args, cmd, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var args, cmd, err_1, _i, _a, m, cmd, err_2;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                if (msg.author.bot || !msg.content.startsWith(config_json_1.prefix))
+                if (msg.author.bot)
                     return [2 /*return*/];
+                if (!msg.content.startsWith(config_json_1.prefix)) return [3 /*break*/, 5];
                 args = msg.content.slice(config_json_1.prefix.length).toLowerCase().split(" ");
                 if (!(args.length > 0)) return [3 /*break*/, 4];
                 cmd = util.getCommand(String(args.shift()));
                 if (!cmd) return [3 /*break*/, 4];
-                _a.label = 1;
+                _b.label = 1;
             case 1:
-                _a.trys.push([1, 3, , 4]);
+                _b.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, cmd.exec(args, msg, bot)];
-            case 2: return [2 /*return*/, _a.sent()];
+            case 2: return [2 /*return*/, _b.sent()];
             case 3:
-                err_1 = _a.sent();
+                err_1 = _b.sent();
                 console.log(err_1);
                 return [3 /*break*/, 4];
-            case 4: return [2 /*return*/];
+            case 4: return [3 /*break*/, 11];
+            case 5:
+                _i = 0, _a = msg.mentions;
+                _b.label = 6;
+            case 6:
+                if (!(_i < _a.length)) return [3 /*break*/, 11];
+                m = _a[_i];
+                if (!(m.id == "744073388036980758")) return [3 /*break*/, 10];
+                cmd = util.getCommand("about");
+                if (!cmd) return [3 /*break*/, 10];
+                _b.label = 7;
+            case 7:
+                _b.trys.push([7, 9, , 10]);
+                return [4 /*yield*/, cmd.exec([], msg, bot)];
+            case 8: return [2 /*return*/, _b.sent()];
+            case 9:
+                err_2 = _b.sent();
+                console.log(err_2);
+                return [3 /*break*/, 10];
+            case 10:
+                _i++;
+                return [3 /*break*/, 6];
+            case 11: return [2 /*return*/];
         }
     });
 }); });

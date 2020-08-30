@@ -5,11 +5,14 @@ import { basic } from "./basic";
 import { full } from "./full";
 import { list } from "./list";
 import { rand } from "./rand";
+import { about } from "./about";
+
 import * as property from "./property";
 
 const arr = [
   help,
   cmd,
+  about,
   basic,
   full,
   list,

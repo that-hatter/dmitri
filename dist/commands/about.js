@@ -55,59 +55,54 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.basic = void 0;
+exports.about = void 0;
 var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
 var util = __importStar(require("../modules/util"));
-var table = __importStar(require("../modules/tableQuery"));
-var elemEmbed = function (element) {
-    var fetch = function (prop) { return table.getProperty(element, prop); };
-    return {
-        embed: {
-            title: fetch("name"),
-            description: fetch("summary"),
-            url: fetch("source"),
-            color: util.colorOf(fetch("category")),
-            thumbnail: { url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg" },
-            fields: [
-                { name: "Symbol", value: fetch("symbol"), inline: true },
-                { name: "Number", value: fetch("number"), inline: true },
-                { name: "Mass", value: fetch("atomic_mass") + " u", inline: true },
-                { name: "Period", value: fetch("period"), inline: true },
-                { name: "Group", value: fetch("group"), inline: true },
-                { name: "Category", value: fetch("category"), inline: true },
-            ],
-            footer: {
-                text: fetch("electron_configuration_semantic"),
-            }
-        }
-    };
-};
-var names = ["basic", config.prefix];
+var names = ["about", "dmitri"];
 var desc = [
-    "Displays basic information regarding the specified `<element>`.",
-    "`<element>` can be the name, symbol, or atomic number.",
-    "Both name and symbol are not case-sensitive."
+    "Displays information about the bot, including credits.",
+    "You may also ping me to use this command."
 ];
-var usage = "<element>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var element;
+    var nodelink, tslink, erislink, jsonlink, avmlink, dmlink, cpnglink;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (args.length < 1)
-                    return [2 /*return*/];
-                element = table.getElementByQuery(args[0]);
-                return [4 /*yield*/, msg.channel.createMessage(element ? elemEmbed(element) : {
-                        // error message if element is not found
+                nodelink = "https://nodejs.org/en/";
+                tslink = "https://www.typescriptlang.org/";
+                erislink = "https://abal.moe/Eris/";
+                jsonlink = "https://github.com/Bowserinator/Periodic-Table-JSON";
+                avmlink = "https://images-of-elements.com/";
+                dmlink = "https://en.wikipedia.org/wiki/Dmitri_Mendeleev";
+                cpnglink = "https://www.cleanpng.com/png-sticker-vk-telegram-genius-person-telegram-sticker-6341296/";
+                return [4 /*yield*/, msg.channel.createMessage({
                         embed: {
                             color: util.colorOf("help"),
-                            title: "Element not found.",
-                            description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                            title: "About Dmitri",
+                            description: "Hi! I'm a bot used to display various periodic table information."
+                                + ("\nMy prefix is `" + config.prefix + "` and you can view a list of my commands using `" + config.prefix + "commands`.")
+                                + ("\nUse `" + config.prefix + "help <command>` for additional help about a specific command."),
+                            fields: [
+                                {
+                                    name: "Credits",
+                                    value: "I was developed by **Hatter#8137**. Yell at him if you see any issue!"
+                                        + ("\nI run on [nodeJS](" + nodelink + ") and was written using [TypeScript](" + tslink + ") and the [Eris](" + erislink + ") library.")
+                                        + ("\nI use [Bowserinator's periodic table JSON](" + jsonlink + ") as my database.")
+                                        + ("\nThe images are fetched from [Chemical Elements: A Virtual Museum](" + avmlink + ").")
+                                        + ("\nMy namesake is, of course, [Dmitri Mendeleev](" + dmlink + "), and my logo is from [CleanPNG](" + cpnglink + ").")
+                                },
+                                {
+                                    name: "Notice",
+                                    value: "Currently, I am being self-hosted on a personal computer so I may not be available all the time."
+                                        + " If demand or support increases, I may become fully online 24/7 in the future, with a bunch of new features."
+                                        + " If you feel like supporting my development, or would like to help in hosting, please feel free to contact **Hatter**."
+                                }
+                            ]
                         }
                     })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.basic = new Command_1.Command(names, desc, func, usage);
+exports.about = new Command_1.Command(names, desc, func);

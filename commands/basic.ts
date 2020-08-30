@@ -22,7 +22,6 @@ const elemEmbed = (element: table.Element) => {
         { name: "Category", value: fetch("category"), inline: true },
       ],
       footer: {
-        icon_url: "https://png2.cleanpng.com/dy/f813124283957a3eff8114177b2eda08/L0KzQYm3U8E4N5xpfZH0aYP2gLBuTfVtbZR5itH3LX3sc8P2kBNweJYyeeZ4bT3mfLr3TfFzfF5qhNdsdILyfn7qjPlxaaN5i58AYXHncrfohcE5aZVrSJC5NEO1QoiCV8E2OmI4S6g7M0i0QIK4TwBvbz==/kisspng-electron-microscope-atom-clip-art-electron-cliparts-5aadbfae18adf0.0432279715213362381011.png",
         text: fetch("electron_configuration_semantic"),
       }
     }
