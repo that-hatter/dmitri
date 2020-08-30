@@ -4,15 +4,15 @@ import * as config from "../config.json";
 
 export class Command {
   public readonly names: string[];
-  public readonly desc: string;
+  public readonly desc: string[];
   public readonly func: (args: string[], msg: Message, client: Client) => Promise<void | Message>;
-  public readonly usage?: string[];
+  public readonly usage?: string;
 
   constructor (
     names: string[], 
-    desc: string,
+    desc: string[],
     func: (args: string[], msg: Message, client: Client) => Promise<void | Message>,
-    usage?: string[]
+    usage?: string
   ) {
     this.names = names;
     this.desc = desc;
@@ -30,16 +30,12 @@ export class Command {
 
   public async showHelp(msg: Message) {
     const label = this.names[0];
-    const embedFields = []
+    const embedFields = [];
 
     if (this.usage) {
-      let val = `\`${ config.prefix + label } ${ this.usage[0] }\``;
-      for (let i = 1; i < this.usage.length; i++) {
-        val += `\n${ this.usage[i] }`;
-      }
       embedFields.push({
         name: "Usage:",
-        value: val,
+        value: `\`${ config.prefix + label } ${ this.usage }\``,
         inline: false
       });
     }
@@ -58,7 +54,7 @@ export class Command {
       embed: {
         color: util.colorOf("help"),
         title: `__${ config.prefix + label }__`,
-        description: this.desc,
+        description: this.desc.join("\n"),
         fields: embedFields
       }
     });

@@ -54,79 +54,83 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Command = void 0;
-var util = __importStar(require("./util"));
-var config = __importStar(require("../config.json"));
-var Command = /** @class */ (function () {
-    function Command(names, desc, func, usage) {
-        this.names = names;
-        this.desc = desc;
-        this.func = func;
-        this.usage = usage;
+exports.list = void 0;
+var Command_1 = require("../modules/Command");
+var table = __importStar(require("../modules/tableQuery"));
+var util = __importStar(require("../modules/util"));
+var keywords = {
+    "category": "category",
+    "phase": "phase",
+    "block": "block",
+    "period": "period",
+    "group": "group",
+    "mass": "atomic_mass",
+    "num": "number",
+    "neg": "electronegativity_pauling",
+    "aff": "electron_affinity",
+    "den": "density",
+    "bp": "boil",
+    "mp": "melt",
+    "heat": "heat"
+};
+var rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
+var names = ["list", "filter"];
+var desc = [
+    "Lists all the elements that match the given `<filter>`",
+    "You can use multiple filters separated by commas.",
+    "A filter is one `<keyword>` followed by `=` and a corresponding `<value>`",
+    "If the `<value>` is numerical, you can also set a range: `[min] to [max]`.",
+    "Here is a list of available keywords:",
+    "`period`, `group`, `category`, `phase`, `block`, `mass`, `num`, `neg`, `aff`, `den`, `mp`, `bp`, `heat`"
+];
+var usage = "<keyword> = <value | [min] to [max]>";
+var parseFilters = function (args) {
+    var _a;
+    var filterStrings = args.join(" ").split(",");
+    var filters = [];
+    for (var _i = 0, filterStrings_1 = filterStrings; _i < filterStrings_1.length; _i++) {
+        var f = filterStrings_1[_i];
+        var _b = f.split("="), key = _b[0], val = _b[1];
+        _a = [key.trim(), val.trim()], key = _a[0], val = _a[1];
+        filters.push({
+            property: keywords[key],
+            value: val,
+            range: rangeables.includes(key) && val.includes("to")
+        });
     }
-    Command.prototype.exec = function (args, msg, client) {
-        return __awaiter(this, void 0, void 0, function () {
-            var err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.func(args, msg, client)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    Command.prototype.showHelp = function (msg) {
-        return __awaiter(this, void 0, void 0, function () {
-            var label, embedFields, aliases;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        label = this.names[0];
-                        embedFields = [];
-                        if (this.usage) {
-                            embedFields.push({
-                                name: "Usage:",
-                                value: "`" + (config.prefix + label) + " " + this.usage + "`",
-                                inline: false
-                            });
+    return filters;
+};
+var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
+    var filters, list, filstr;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (args.length < 1)
+                    return [2 /*return*/];
+                filters = parseFilters(args);
+                list = table.getList(filters);
+                filstr = filters.map(function (f) {
+                    var val = f.range ? f.value.split("to").map(function (x) { return x.trim(); }).join(" to ") : f.value;
+                    return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
+                }).join(" | ");
+                return [4 /*yield*/, msg.channel.createMessage(list.length > 0 ? {
+                        embed: {
+                            color: util.colorOf("help"),
+                            title: "List of elements matching your filter:",
+                            description: list.map(function (e) { return "`" + e.number + " " + e.name + "`"; }).join(" | "),
+                            footer: { text: filstr }
                         }
-                        if (this.names.length > 1) {
-                            aliases = __spreadArrays(this.names);
-                            aliases.shift();
-                            embedFields.push({
-                                name: "Aliases:",
-                                value: aliases.map(function (nm) { return "`" + (config.prefix + nm) + "`"; }).join(", "),
-                                inline: false
-                            });
+                    } : {
+                        embed: {
+                            color: util.colorOf("help"),
+                            title: "Sorry, I found no elements matching this filter:",
+                            description: "`" + filstr
+                                + "`\n\nRecheck your query to see if there are any mistakes, or try using a different filter.",
                         }
-                        return [4 /*yield*/, msg.channel.createMessage({
-                                embed: {
-                                    color: util.colorOf("help"),
-                                    title: "__" + (config.prefix + label) + "__",
-                                    description: this.desc.join("\n"),
-                                    fields: embedFields
-                                }
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return Command;
-}());
-exports.Command = Command;
+                    })];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.list = new Command_1.Command(names, desc, func, usage);

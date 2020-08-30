@@ -60,8 +60,11 @@ var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
 var util = __importStar(require("../modules/util"));
 var names = ["help"];
-var desc = "Explains what a command does and how to use it, along with its aliases and examples. You can view a list of available commands using `" + config.prefix + "commands`.";
-var usage = ["COMMAND", "Here __COMMAND__ can be the actual name of the command, or any of its aliases."];
+var desc = [
+    "Explains what a command does and how to use it.",
+    "You can view a list of available commands using `" + config.prefix + "commands`."
+];
+var usage = "<commandname>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var cmdName, cmd;
     return __generator(this, function (_a) {
@@ -76,7 +79,7 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                     embed: {
                         color: util.colorOf("help"),
                         title: "Command not found:",
-                        description: "\n        I have no commands named `" + args[0] + "`. \n        You can view the list of my available commands using `" + config.prefix + "commands`.\n        ",
+                        description: "\n        I don't have a command named `" + args[0] + "`. \n        You can view the list of my available commands using `" + config.prefix + "commands`.\n        ",
                     }
                 })];
             case 3: return [2 /*return*/, _a.sent()];

@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,16 +55,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.hello = void 0;
+exports.rand = void 0;
 var Command_1 = require("../modules/Command");
-var names = ["hello"];
-var desc = "Added because of <@492913557277769729>.";
+var basic_1 = require("./basic");
+var table = __importStar(require("../modules/tableQuery"));
+var names = ["rand", "random"];
+var desc = ["Gives a random element and its basic information."];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, msg.channel.createMessage("Hi!")];
+            case 0: return [4 /*yield*/, basic_1.basic.exec([String(Math.floor(Math.random() * table.getMaxZ()))], msg, client)];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.hello = new Command_1.Command(names, desc, func);
+exports.rand = new Command_1.Command(names, desc, func);

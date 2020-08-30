@@ -30,8 +30,12 @@ const elemEmbed = (element: table.Element) => {
 }
 
 const names = ["basic", config.prefix ];
-const desc = "Displays basic information regarding an element including a summary and an image.";
-const usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number of your desired element. Both name and symbol are not case-sensitive."];
+const desc = [
+  "Displays basic information regarding the specified `<element>`.",
+  "`<element>` can be the name, symbol, or atomic number.",
+  "Both name and symbol are not case-sensitive."
+];
+const usage = "<element>";
 
 const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
   if (args.length < 1) return;
@@ -48,4 +52,4 @@ const func = async (args: string[], msg: Message, client: Client): Promise<Messa
   );
 }
 
-export const info = new Command(names, desc, func, usage);
+export const basic = new Command(names, desc, func, usage);

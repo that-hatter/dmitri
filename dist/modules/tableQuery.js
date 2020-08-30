@@ -19,7 +19,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProperty = exports.getBlock = exports.getGroup = exports.getPropUnit = exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = void 0;
+exports.getList = exports.isPassAllFilters = exports.filterCheck = exports.getProperty = exports.getBlock = exports.getGroup = exports.getPropUnit = exports.getMaxZ = exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = void 0;
 //=========================================================//
 // List of functions used to query the periodic table json
 // Might convert it to a PeriodicTable class in the future, 
@@ -45,6 +45,14 @@ exports.getElementByQuery = function (query) {
         ? exports.getElementWithName(query) || exports.getElementWithProp("symbol", query)
         : exports.getElementWithProp("number", Number(query));
 };
+exports.getMaxZ = function () {
+    // TODO: optimize this to be only loaded once on start-up,
+    // esp. as a field in a PeriodicTable class
+    var count = 0;
+    for (var k in elements)
+        count++;
+    return count;
+};
 //=========================================================//
 // Element functions
 //=========================================================//
@@ -64,12 +72,12 @@ exports.getGroup = function (element) {
 };
 exports.getBlock = function (element) {
     if (element.ypos > 8)
-        return "f-block";
+        return "f";
     if (element.xpos < 3 || element.name === "helium")
-        return "s-block";
+        return "s";
     if (element.xpos < 13)
-        return "d-block";
-    return "p-block";
+        return "d";
+    return "p";
 };
 exports.getProperty = function (elem, prop) {
     // group and block need to be calculated as they're not in the json
@@ -77,6 +85,16 @@ exports.getProperty = function (elem, prop) {
         return String(exports.getGroup(elem));
     if (prop === "block")
         return exports.getBlock(elem);
+    if (prop === "links") {
+        var rsclink = "https://www.rsc.org/periodic-table/element/" + exports.getProperty(elem, "number");
+        var pbclink = "https://pubchem.ncbi.nlm.nih.gov/element/" + exports.getProperty(elem, "number");
+        var nistlink = "https://webbook.nist.gov/cgi/inchi/InChI%3D1S/" + exports.getProperty(elem, "symbol");
+        var imglink = "https://images-of-elements.com/" + exports.getProperty(elem, "name").toLowerCase() + ".php";
+        return "\n[The Royal Society of Chemistry](" + rsclink + ")"
+            + "\n[PubChem](" + pbclink + ")"
+            + "\n[NIST Chemistry Webbook](" + nistlink + ")"
+            + "\n[Chemical Elements: A Virtual Museum](" + imglink + ")";
+    }
     var val = elem[prop];
     if (Array.isArray(val))
         return val = val.join(", ");
@@ -85,4 +103,38 @@ exports.getProperty = function (elem, prop) {
         return unit ? (val + " " + unit) : val;
     }
     return "`N/A`";
+};
+//=========================================================//
+// Filtering and listing
+//=========================================================//
+exports.filterCheck = function (filter, element) {
+    var val = exports.getProperty(element, filter.property);
+    if (filter.range && val && !isNaN(Number(val))) {
+        var _a = filter.value.split("to").map(function (n) { return Number(n.trim()); }), min = _a[0], max = _a[1];
+        return min <= Number(val) && max >= Number(val);
+    }
+    if (typeof val === "number")
+        return Number(filter.value) === val;
+    if (filter.value === "unknown") {
+        return (filter.property === "category" && typeof val === "string")
+            ? val.startsWith("unknown") : !val;
+    }
+    return val === filter.value;
+};
+exports.isPassAllFilters = function (filters, element) {
+    for (var _i = 0, filters_1 = filters; _i < filters_1.length; _i++) {
+        var f = filters_1[_i];
+        if (!exports.filterCheck(f, element))
+            return false;
+    }
+    return true;
+};
+exports.getList = function (filters) {
+    var out = [];
+    for (var k in elements) {
+        var element = elements[k];
+        if (exports.isPassAllFilters(filters, element))
+            out.push(element);
+    }
+    return out;
 };

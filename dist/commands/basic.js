@@ -54,79 +54,61 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Command = void 0;
-var util = __importStar(require("./util"));
+exports.basic = void 0;
+var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
-var Command = /** @class */ (function () {
-    function Command(names, desc, func, usage) {
-        this.names = names;
-        this.desc = desc;
-        this.func = func;
-        this.usage = usage;
-    }
-    Command.prototype.exec = function (args, msg, client) {
-        return __awaiter(this, void 0, void 0, function () {
-            var err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.func(args, msg, client)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
+var util = __importStar(require("../modules/util"));
+var table = __importStar(require("../modules/tableQuery"));
+var elemEmbed = function (element) {
+    var fetch = function (prop) { return table.getProperty(element, prop); };
+    return {
+        embed: {
+            title: fetch("name"),
+            description: fetch("summary"),
+            url: fetch("source"),
+            color: util.colorOf(fetch("category")),
+            thumbnail: { url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg" },
+            fields: [
+                { name: "Symbol", value: fetch("symbol"), inline: true },
+                { name: "Number", value: fetch("number"), inline: true },
+                { name: "Mass", value: fetch("atomic_mass") + " u", inline: true },
+                { name: "Period", value: fetch("period"), inline: true },
+                { name: "Group", value: fetch("group"), inline: true },
+                { name: "Category", value: fetch("category"), inline: true },
+            ],
+            footer: {
+                icon_url: "https://png2.cleanpng.com/dy/f813124283957a3eff8114177b2eda08/L0KzQYm3U8E4N5xpfZH0aYP2gLBuTfVtbZR5itH3LX3sc8P2kBNweJYyeeZ4bT3mfLr3TfFzfF5qhNdsdILyfn7qjPlxaaN5i58AYXHncrfohcE5aZVrSJC5NEO1QoiCV8E2OmI4S6g7M0i0QIK4TwBvbz==/kisspng-electron-microscope-atom-clip-art-electron-cliparts-5aadbfae18adf0.0432279715213362381011.png",
+                text: fetch("electron_configuration_semantic"),
+            }
+        }
     };
-    Command.prototype.showHelp = function (msg) {
-        return __awaiter(this, void 0, void 0, function () {
-            var label, embedFields, aliases;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        label = this.names[0];
-                        embedFields = [];
-                        if (this.usage) {
-                            embedFields.push({
-                                name: "Usage:",
-                                value: "`" + (config.prefix + label) + " " + this.usage + "`",
-                                inline: false
-                            });
+};
+var names = ["basic", config.prefix];
+var desc = [
+    "Displays basic information regarding the specified `<element>`.",
+    "`<element>` can be the name, symbol, or atomic number.",
+    "Both name and symbol are not case-sensitive."
+];
+var usage = "<element>";
+var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
+    var element;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (args.length < 1)
+                    return [2 /*return*/];
+                element = table.getElementByQuery(args[0]);
+                return [4 /*yield*/, msg.channel.createMessage(element ? elemEmbed(element) : {
+                        // error message if element is not found
+                        embed: {
+                            color: util.colorOf("help"),
+                            title: "Element not found.",
+                            description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
                         }
-                        if (this.names.length > 1) {
-                            aliases = __spreadArrays(this.names);
-                            aliases.shift();
-                            embedFields.push({
-                                name: "Aliases:",
-                                value: aliases.map(function (nm) { return "`" + (config.prefix + nm) + "`"; }).join(", "),
-                                inline: false
-                            });
-                        }
-                        return [4 /*yield*/, msg.channel.createMessage({
-                                embed: {
-                                    color: util.colorOf("help"),
-                                    title: "__" + (config.prefix + label) + "__",
-                                    description: this.desc.join("\n"),
-                                    fields: embedFields
-                                }
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return Command;
-}());
-exports.Command = Command;
+                    })];
+            case 1: return [2 /*return*/, _a.sent()];
+        }
+    });
+}); };
+exports.basic = new Command_1.Command(names, desc, func, usage);

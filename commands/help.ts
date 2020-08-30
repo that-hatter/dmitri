@@ -4,8 +4,11 @@ import * as config from "../config.json"
 import * as util from "../modules/util"
 
 const names = ["help"];
-const desc = `Explains what a command does and how to use it, along with its aliases and examples. You can view a list of available commands using \`${ config.prefix }commands\`.`;
-const usage = ["COMMAND", "Here __COMMAND__ can be the actual name of the command, or any of its aliases."];
+const desc = [
+  `Explains what a command does and how to use it.`,
+  `You can view a list of available commands using \`${ config.prefix }commands\`.`
+];
+const usage = "<commandname>";
 
 const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
   const cmdName: string = args[0] || "help";
@@ -18,7 +21,7 @@ const func = async (args: string[], msg: Message, client: Client): Promise<Messa
       title: `Command not found:`,
       description: 
         `
-        I have no commands named \`${ args[0] }\`. 
+        I don't have a command named \`${ args[0] }\`. 
         You can view the list of my available commands using \`${ config.prefix }commands\`.
         `,
     }

@@ -55,56 +55,48 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.info = void 0;
+exports.cmd = void 0;
 var Command_1 = require("../modules/Command");
-var config = __importStar(require("../config.json"));
+var PropertyCommand_1 = require("../modules/PropertyCommand");
+var index_1 = require("./index");
 var util = __importStar(require("../modules/util"));
-var table = __importStar(require("../modules/tableQuery"));
-var elemEmbed = function (element) {
-    var fetch = function (prop) { return table.getProperty(element, prop); };
-    return {
-        embed: {
-            title: fetch("name"),
-            description: fetch("summary"),
-            url: fetch("source"),
-            color: util.colorOf(fetch("category")),
-            thumbnail: { url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg" },
-            fields: [
-                { name: "Symbol", value: fetch("symbol"), inline: true },
-                { name: "Number", value: fetch("number"), inline: true },
-                { name: "Mass", value: fetch("atomic_mass") + " u", inline: true },
-                { name: "Period", value: fetch("period"), inline: true },
-                { name: "Group", value: fetch("group"), inline: true },
-                { name: "Category", value: fetch("category"), inline: true },
-            ],
-            footer: {
-                icon_url: "https://png2.cleanpng.com/dy/f813124283957a3eff8114177b2eda08/L0KzQYm3U8E4N5xpfZH0aYP2gLBuTfVtbZR5itH3LX3sc8P2kBNweJYyeeZ4bT3mfLr3TfFzfF5qhNdsdILyfn7qjPlxaaN5i58AYXHncrfohcE5aZVrSJC5NEO1QoiCV8E2OmI4S6g7M0i0QIK4TwBvbz==/kisspng-electron-microscope-atom-clip-art-electron-cliparts-5aadbfae18adf0.0432279715213362381011.png",
-                text: fetch("electron_configuration_semantic"),
-            }
-        }
-    };
-};
-var names = ["basic", config.prefix];
-var desc = "Displays basic information regarding an element including a summary and an image.";
-var usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number of your desired element. Both name and symbol are not case-sensitive."];
+var config = __importStar(require("../config.json"));
+var names = ["commands"];
+var desc = ["Gives a list of available commands for the bot."];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var element;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var main, props, _i, _a, cmd_1;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                if (args.length < 1)
-                    return [2 /*return*/];
-                element = table.getElementByQuery(args[0]);
-                return [4 /*yield*/, msg.channel.createMessage(element ? elemEmbed(element) : {
-                        // error message if element is not found
+                main = "";
+                props = "";
+                for (_i = 0, _a = index_1.commands.arr; _i < _a.length; _i++) {
+                    cmd_1 = _a[_i];
+                    if (cmd_1 instanceof PropertyCommand_1.PropertyCommand) {
+                        props += "`" + (config.prefix + cmd_1.names[0]) + "` | ";
+                    }
+                    else {
+                        main += "`" + (config.prefix + cmd_1.names[0]);
+                        if (cmd_1.usage)
+                            main += " " + cmd_1.usage;
+                        main += "` | " + cmd_1.desc[0] + "\n";
+                    }
+                }
+                return [4 /*yield*/, msg.channel.createMessage({
                         embed: {
                             color: util.colorOf("help"),
-                            title: "Element not found.",
-                            description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                            title: "Dmitri Commands",
+                            description: main + "\n",
+                            fields: [
+                                {
+                                    name: "You can also query specific properties of an `<element>`:",
+                                    value: props.substring(0, props.length - 2)
+                                }
+                            ]
                         }
                     })];
-            case 1: return [2 /*return*/, _a.sent()];
+            case 1: return [2 /*return*/, _b.sent()];
         }
     });
 }); };
-exports.info = new Command_1.Command(names, desc, func, usage);
+exports.cmd = new Command_1.Command(names, desc, func);

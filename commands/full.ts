@@ -39,8 +39,12 @@ const elemEmbed = (element: table.Element) => {
 }
 
 const names = ["full", config.prefix + config.prefix ];
-const desc = "Displays a more compact and extensive information regarding an element without the image and summary.";
-const usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
+const desc = [
+  "Displays more extensive data about the specified `<element>`.",
+  "`<element>` can be the name, symbol, or atomic number.",
+  "Both name and symbol are not case-sensitive."
+];
+const usage = "<element>";
 
 const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
   if (args.length < 1) return;

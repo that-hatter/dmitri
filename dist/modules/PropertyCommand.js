@@ -84,20 +84,30 @@ var PropertyCommand = /** @class */ (function (_super) {
                         if (args.length < 1)
                             return [2 /*return*/];
                         element = table.getElementByQuery(args[0]);
-                        return [4 /*yield*/, msg.channel.createMessage(element ? "**" + element.name + "** | " + label + ": " + table.getProperty(element, elemProp) :
-                                {
-                                    embed: {
-                                        color: util.colorOf("help"),
-                                        title: "Element not found.",
-                                        description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
-                                    }
-                                })];
+                        return [4 /*yield*/, msg.channel.createMessage(element ? {
+                                embed: {
+                                    color: util.colorOf(element.category),
+                                    title: element.name,
+                                    url: element.source,
+                                    description: "**" + label + "**: " + table.getProperty(element, elemProp)
+                                }
+                            } : {
+                                embed: {
+                                    color: util.colorOf("help"),
+                                    title: "Element not found.",
+                                    description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                                }
+                            })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         }); };
-        var desc = "Gives the specified element's **" + label + "**.";
-        var usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
+        var desc = [
+            "Gives the specified `<element>`'s **" + label + "**.",
+            "`<element>` can be the name, symbol, or atomic number.",
+            "Both name and symbol are not case-sensitive."
+        ];
+        var usage = "<element>";
         _this = _super.call(this, names, desc, func, usage) || this;
         return _this;
     }

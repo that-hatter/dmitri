@@ -11,8 +11,14 @@ export class PropertyCommand extends Command {
       const element = table.getElementByQuery(args[0]);
 
       return await msg.channel.createMessage(
-        element ? `**${ element.name }** | ${ label }: ${ table.getProperty(element, elemProp) }` :
-        {
+        element ? {
+          embed: {
+            color: util.colorOf(element.category),
+            title: element.name,
+            url: element.source,
+            description: `**${ label }**: ${ table.getProperty(element, elemProp) }`
+          }
+        } : {
           embed: {
             color: util.colorOf("help"),
             title: "Element not found.",
@@ -23,8 +29,12 @@ export class PropertyCommand extends Command {
 
     }
 
-    const desc = `Gives the specified element's **${ label }**.`;
-    const usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
+    const desc = [
+      `Gives the specified \`<element>\`'s **${ label }**.`,
+      "`<element>` can be the name, symbol, or atomic number.",
+      "Both name and symbol are not case-sensitive."
+    ];
+    const usage = "<element>";
 
     super(names, desc, func, usage );
   }

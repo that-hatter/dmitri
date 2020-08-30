@@ -92,8 +92,12 @@ var elemEmbed = function (element) {
     };
 };
 var names = ["full", config.prefix + config.prefix];
-var desc = "Displays a more compact and extensive information regarding an element without the image and summary.";
-var usage = ["ELEMENT", "Here, __ELEMENT__ can be the name, symbol, or atomic number. Both name and symbol are not case-sensitive."];
+var desc = [
+    "Displays more extensive data about the specified `<element>`.",
+    "`<element>` can be the name, symbol, or atomic number.",
+    "Both name and symbol are not case-sensitive."
+];
+var usage = "<element>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var element;
     return __generator(this, function (_a) {

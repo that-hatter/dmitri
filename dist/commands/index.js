@@ -20,25 +20,29 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.commands = void 0;
-var info_1 = require("./info");
 var help_1 = require("./help");
+var commands_1 = require("./commands");
+var basic_1 = require("./basic");
 var full_1 = require("./full");
-var hello_1 = require("./hello");
+var list_1 = require("./list");
+var rand_1 = require("./rand");
 var property = __importStar(require("./property"));
-var list = [
-    info_1.info,
+var arr = [
     help_1.help,
+    commands_1.cmd,
+    basic_1.basic,
     full_1.full,
-    hello_1.hello
+    list_1.list,
+    rand_1.rand
 ];
 for (var p in property) {
-    list.push(property[p]);
+    arr.push(property[p]);
 }
 var mapping = {};
-list.forEach(function (cmd) {
+arr.forEach(function (cmd) {
     for (var _i = 0, _a = cmd.names; _i < _a.length; _i++) {
         var name_1 = _a[_i];
         mapping[name_1] = cmd;
     }
 });
-exports.commands = { list: list, mapping: mapping };
+exports.commands = { arr: arr, mapping: mapping };
