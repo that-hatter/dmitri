@@ -35,7 +35,7 @@ const func = async (
         {
           name: "Credits",
           value:
-            `I was developed by **Hatter#8137**. Yell at him if you see any issue!` +
+            `I was developed by **Hatter#0106**. Yell at him if you see any issue!` +
             `\nI run on [nodeJS](${nodelink}) and was written using [TypeScript](${tslink}) and the [Eris](${erislink}) library.` +
             `\nI use [Bowserinator's periodic table JSON](${jsonlink}) as my database.` +
             `\nThe images are fetched from [Chemical Elements: A Virtual Museum](${avmlink}).` +

@@ -4,7 +4,6 @@
   "owners": ["552404323301195777"],
   "colors": {
     "help": "0xFFFEFF",
-
     "diatomic nonmetal": "0xFF00FF",
     "noble gas": "0x800080",
     "alkali metal": "0xFF0000",
