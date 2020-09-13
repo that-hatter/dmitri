@@ -28,15 +28,7 @@ var list_1 = require("./list");
 var rand_1 = require("./rand");
 var about_1 = require("./about");
 var property = __importStar(require("./property"));
-var arr = [
-    help_1.help,
-    commands_1.cmd,
-    about_1.about,
-    basic_1.basic,
-    full_1.full,
-    list_1.list,
-    rand_1.rand
-];
+var arr = [help_1.help, commands_1.cmd, about_1.about, basic_1.basic, full_1.full, list_1.list, rand_1.rand];
 for (var p in property) {
     arr.push(property[p]);
 }

@@ -90,10 +90,10 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                             fields: [
                                 {
                                     name: "You can also query specific properties of an `<element>`:",
-                                    value: props.substring(0, props.length - 2)
-                                }
-                            ]
-                        }
+                                    value: props.substring(0, props.length - 2),
+                                },
+                            ],
+                        },
                     })];
             case 1: return [2 /*return*/, _b.sent()];
         }

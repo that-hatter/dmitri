@@ -8,17 +8,21 @@ import * as config from "../config.json";
 const names = ["commands"];
 const desc = ["Gives a list of available commands for the bot."];
 
-const func = async (args: string[], msg: Message, client: Client): Promise<Message | void> => {
+const func = async (
+  args: string[],
+  msg: Message,
+  client: Client
+): Promise<Message | void> => {
   let main = "";
   let props = "";
 
   for (const cmd of commands.arr) {
     if (cmd instanceof PropertyCommand) {
-      props += `\`${ config.prefix + cmd.names[0] }\` | `
+      props += `\`${config.prefix + cmd.names[0]}\` | `;
     } else {
-      main += `\`${ config.prefix + cmd.names[0] }`;
+      main += `\`${config.prefix + cmd.names[0]}`;
       if (cmd.usage) main += " " + cmd.usage;
-      main += `\` | ${ cmd.desc[0] }\n`;
+      main += `\` | ${cmd.desc[0]}\n`;
     }
   }
 
@@ -30,11 +34,11 @@ const func = async (args: string[], msg: Message, client: Client): Promise<Messa
       fields: [
         {
           name: "You can also query specific properties of an `<element>`:",
-          value: props.substring(0, props.length - 2)
-        }
-      ]
-    }
+          value: props.substring(0, props.length - 2),
+        },
+      ],
+    },
   });
-}
+};
 
 export const cmd = new Command(names, desc, func);

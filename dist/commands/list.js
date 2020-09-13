@@ -66,7 +66,7 @@ var desc = [
     "A filter is one `<keyword>` followed by `=` and a corresponding `<value>`",
     "If the `<value>` is numerical, you can also set a range: `[min] to [max]`.",
     "Here is a list of available keywords:",
-    "`period`, `group`, `category`, `phase`, `block`, `mass`, `num`, `neg`, `aff`, `den`, `mp`, `bp`, `heat`"
+    "`period`, `group`, `category`, `phase`, `block`, `mass`, `num`, `neg`, `aff`, `den`, `mp`, `bp`, `heat`",
 ];
 var usage = "<keyword> = <value | [min] to [max]>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
@@ -81,31 +81,44 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                     if (!list[i].name)
                         continue;
                     listStr += list[i].name;
-                    listStr += (" ").repeat(14 - list[i].name.length);
+                    listStr += " ".repeat(14 - list[i].name.length);
                     if (i % 3 == 2 && i < list.length - 1)
                         listStr += "\n";
                 }
-                return [4 /*yield*/, msg.channel.createMessage(list.length > 0 ? {
-                        embed: {
-                            color: util.colorOf("help"),
-                            title: "List of elements matching your filter:",
-                            description: "```" + listStr + "```",
-                            footer: {
-                                text: args.length > 0 ?
-                                    filters.map(function (f) {
-                                        var val = f.range ? f.value.split("to").map(function (x) { return x.trim(); }).join(" to ") : f.value;
-                                        return f.property[0].toUpperCase() + f.property.substring(1) + ": " + val;
-                                    }).join(" | ") : "All elements."
-                            }
+                return [4 /*yield*/, msg.channel.createMessage(list.length > 0
+                        ? {
+                            embed: {
+                                color: util.colorOf("help"),
+                                title: "List of elements matching your filter:",
+                                description: "```" + listStr + "```",
+                                footer: {
+                                    text: args.length > 0
+                                        ? filters
+                                            .map(function (f) {
+                                            var val = f.range
+                                                ? f.value
+                                                    .split("to")
+                                                    .map(function (x) { return x.trim(); })
+                                                    .join(" to ")
+                                                : f.value;
+                                            return (f.property[0].toUpperCase() +
+                                                f.property.substring(1) +
+                                                ": " +
+                                                val);
+                                        })
+                                            .join(" | ")
+                                        : "All elements.",
+                                },
+                            },
                         }
-                    } : {
-                        embed: {
-                            color: util.colorOf("help"),
-                            title: "No elements found.",
-                            description: "Sorry, I couldn't find an element matching your filter."
-                                + " Recheck your query, or try using a different filter.",
-                        }
-                    })];
+                        : {
+                            embed: {
+                                color: util.colorOf("help"),
+                                title: "No elements found.",
+                                description: "Sorry, I couldn't find an element matching your filter." +
+                                    " Recheck your query, or try using a different filter.",
+                            },
+                        })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });

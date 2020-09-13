@@ -62,7 +62,7 @@ var util = __importStar(require("../modules/util"));
 var names = ["help"];
 var desc = [
     "Explains what a command does and how to use it.",
-    "You can view a list of available commands using `" + config.prefix + "commands`."
+    "You can view a list of available commands using `" + config.prefix + "commands`.",
 ];
 var usage = "<commandname>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
@@ -80,7 +80,7 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                         color: util.colorOf("help"),
                         title: "Command not found:",
                         description: "\n        I don't have a command named `" + args[0] + "`. \n        You can view the list of my available commands using `" + config.prefix + "commands`.\n        ",
-                    }
+                    },
                 })];
             case 3: return [2 /*return*/, _a.sent()];
         }

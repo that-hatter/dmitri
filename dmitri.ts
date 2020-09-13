@@ -1,6 +1,6 @@
 import { Client, Message } from "eris";
-import { token, prefix } from "./config.json"
-import * as util from "./modules/util"
+import { token, prefix } from "./config.json";
+import * as util from "./modules/util";
 
 const bot = new Client(token);
 
@@ -37,9 +37,8 @@ bot.on("messageCreate", async (msg: Message) => {
           }
         }
       }
-    }  
+    }
   }
-
 });
 
 bot.connect();

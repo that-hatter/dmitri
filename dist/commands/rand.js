@@ -65,7 +65,7 @@ var names = ["rand", "random"];
 var desc = [
     "Gives a random element and its basic information.",
     "You can use a `[filter]` to limit the elements.",
-    "Filter usage is the same as `" + config.prefix + "list`"
+    "Filter usage is the same as `" + config.prefix + "list`",
 ];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
     var filters, list, randEl, _a;
@@ -84,9 +84,9 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                     embed: {
                         color: util.colorOf("help"),
                         title: "No elements found.",
-                        description: "Sorry, I couldn't find an element matching your filter."
-                            + " Recheck your query, or try using a different filter.",
-                    }
+                        description: "Sorry, I couldn't find an element matching your filter." +
+                            " Recheck your query, or try using a different filter.",
+                    },
                 })];
             case 3:
                 _a = _b.sent();

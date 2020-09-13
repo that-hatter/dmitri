@@ -1,19 +1,19 @@
 {
-  "token" : "NzQ0MDczMzg4MDM2OTgwNzU4.Xzd6Vw.XYL71o2_Okg6VPscpTez2p-pMeg",
-  "prefix" : ";",
+  "token": "NzQ0MDczMzg4MDM2OTgwNzU4.Xzd6Vw.XYL71o2_Okg6VPscpTez2p-pMeg",
+  "prefix": ";",
   "owners": ["552404323301195777"],
   "colors": {
     "help": "0xFFFEFF",
 
-    "diatomic nonmetal"     : "0xFF00FF",
-    "noble gas"             : "0x800080",
-    "alkali metal"          : "0xFF0000",
-    "alkaline earth metal"  : "0x800000",
-    "metalloid"             : "0x00FF00",
-    "polyatomic nonmetal"   : "0xFFFF00",
-    "post-transition metal" : "0x808000",
-    "transition metal"      : "0x008000",
-    "lanthanide"            : "0x00FFFF",
-    "actinide"              : "0x008080"  
-   }
+    "diatomic nonmetal": "0xFF00FF",
+    "noble gas": "0x800080",
+    "alkali metal": "0xFF0000",
+    "alkaline earth metal": "0x800000",
+    "metalloid": "0x00FF00",
+    "polyatomic nonmetal": "0xFFFF00",
+    "post-transition metal": "0x808000",
+    "transition metal": "0x008000",
+    "lanthanide": "0x00FFFF",
+    "actinide": "0x008080"
+  }
 }

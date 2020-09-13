@@ -68,7 +68,9 @@ var elemEmbed = function (element) {
             description: fetch("summary"),
             url: fetch("source"),
             color: util.colorOf(fetch("category")),
-            thumbnail: { url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg" },
+            thumbnail: {
+                url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg",
+            },
             fields: [
                 { name: "Symbol", value: fetch("symbol"), inline: true },
                 { name: "Number", value: fetch("number"), inline: true },
@@ -79,15 +81,15 @@ var elemEmbed = function (element) {
             ],
             footer: {
                 text: fetch("electron_configuration_semantic"),
-            }
-        }
+            },
+        },
     };
 };
 var names = ["basic", config.prefix];
 var desc = [
     "Displays basic information regarding the specified `<element>`.",
     "`<element>` can be the name, symbol, or atomic number.",
-    "Both name and symbol are not case-sensitive."
+    "Both name and symbol are not case-sensitive.",
 ];
 var usage = "<element>";
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
@@ -98,14 +100,16 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                 if (args.length < 1)
                     return [2 /*return*/];
                 element = table.getElementByQuery(args[0]);
-                return [4 /*yield*/, msg.channel.createMessage(element ? elemEmbed(element) : {
-                        // error message if element is not found
-                        embed: {
-                            color: util.colorOf("help"),
-                            title: "Element not found.",
-                            description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
-                        }
-                    })];
+                return [4 /*yield*/, msg.channel.createMessage(element
+                        ? elemEmbed(element)
+                        : {
+                            // error message if element is not found
+                            embed: {
+                                color: util.colorOf("help"),
+                                title: "Element not found.",
+                                description: "There are no elements with this name, symbol, or number: `" + args[0] + "`",
+                            },
+                        })];
             case 1: return [2 /*return*/, _a.sent()];
         }
     });
