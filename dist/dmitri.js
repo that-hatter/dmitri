@@ -54,6 +54,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var eris_1 = require("eris");
 var config_json_1 = require("./config.json");
@@ -62,11 +73,11 @@ var bot = new eris_1.Client(config_json_1.token);
 bot.on("ready", function () {
     console.log("Bot connected.");
 });
-// message handler
 bot.on("messageCreate", function (msg) { return __awaiter(void 0, void 0, void 0, function () {
-    var args, cmd, err_1, _i, _a, m, cmd, err_2;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var args, cmd, err_1, _a, _b, m, cmd, err_2, e_1_1;
+    var e_1, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 if (msg.author.bot)
                     return [2 /*return*/];
@@ -75,38 +86,50 @@ bot.on("messageCreate", function (msg) { return __awaiter(void 0, void 0, void 0
                 if (!(args.length > 0)) return [3 /*break*/, 4];
                 cmd = util.getCommand(String(args.shift()));
                 if (!cmd) return [3 /*break*/, 4];
-                _b.label = 1;
+                _d.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _d.trys.push([1, 3, , 4]);
                 return [4 /*yield*/, cmd.exec(args, msg, bot)];
-            case 2: return [2 /*return*/, _b.sent()];
+            case 2: return [2 /*return*/, _d.sent()];
             case 3:
-                err_1 = _b.sent();
+                err_1 = _d.sent();
                 console.log(err_1);
                 return [3 /*break*/, 4];
-            case 4: return [3 /*break*/, 11];
+            case 4: return [3 /*break*/, 14];
             case 5:
-                _i = 0, _a = msg.mentions;
-                _b.label = 6;
+                _d.trys.push([5, 12, 13, 14]);
+                _a = __values(msg.mentions), _b = _a.next();
+                _d.label = 6;
             case 6:
-                if (!(_i < _a.length)) return [3 /*break*/, 11];
-                m = _a[_i];
+                if (!!_b.done) return [3 /*break*/, 11];
+                m = _b.value;
                 if (!(m.id == "744073388036980758")) return [3 /*break*/, 10];
                 cmd = util.getCommand("about");
                 if (!cmd) return [3 /*break*/, 10];
-                _b.label = 7;
+                _d.label = 7;
             case 7:
-                _b.trys.push([7, 9, , 10]);
+                _d.trys.push([7, 9, , 10]);
                 return [4 /*yield*/, cmd.exec([], msg, bot)];
-            case 8: return [2 /*return*/, _b.sent()];
+            case 8: return [2 /*return*/, _d.sent()];
             case 9:
-                err_2 = _b.sent();
+                err_2 = _d.sent();
                 console.log(err_2);
                 return [3 /*break*/, 10];
             case 10:
-                _i++;
+                _b = _a.next();
                 return [3 /*break*/, 6];
-            case 11: return [2 /*return*/];
+            case 11: return [3 /*break*/, 14];
+            case 12:
+                e_1_1 = _d.sent();
+                e_1 = { error: e_1_1 };
+                return [3 /*break*/, 14];
+            case 13:
+                try {
+                    if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
+                }
+                finally { if (e_1) throw e_1.error; }
+                return [7 /*endfinally*/];
+            case 14: return [2 /*return*/];
         }
     });
 }); });

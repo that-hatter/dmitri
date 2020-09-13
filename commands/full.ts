@@ -1,44 +1,40 @@
 import { Client, Message } from "eris";
 import { Command } from "../modules/Command";
+import { Element } from "../modules/Element";
 import * as config from "../config.json";
 import * as util from "../modules/util";
-import * as table from "../modules/tableQuery";
+import { fullTable } from "../modules/Table";
 
-const elemEmbed = (element: table.Element) => {
-  const fetch = (prop: string) => table.getProperty(element, prop);
-
-  const rsclink =
-    "https://www.rsc.org/periodic-table/element/" + fetch("number");
-  const pbclink = "https://pubchem.ncbi.nlm.nih.gov/element/" + fetch("number");
-  const nistlink =
-    "https://webbook.nist.gov/cgi/inchi/InChI%3D1S/" + fetch("symbol");
+const elemEmbed = (element: Element) => {
   return {
     embed: {
-      title:
-        fetch("number") + " | " + fetch("name") + " (" + fetch("symbol") + ")",
-      url: fetch("source"),
-      color: util.colorOf(fetch("category")),
+      title: `${element.getPropertyString(
+        "number"
+      )} | ${element.getPropertyString("name")} (${element.getPropertyString(
+        "symbol"
+      )})`,
+      url: element.getPropertyString("source"),
+      color: util.colorOf(element.getPropertyString("categ")),
       description:
-        `**Mass**: ${fetch("atomic_mass")} | **Phase at STP**: ${fetch(
-          "phase"
-        )}\n` +
-        `**Period**: ${fetch("period")} | **Group**: ${fetch(
-          "group"
-        )} | **Block**: ${fetch("block")}\n` +
-        `**Density**: ${fetch("density")}\n` +
-        `**Category**: ${fetch("category")}\n` +
-        `**Discovered By**: ${fetch("discovered_by")}\n` +
-        `**Named by**: ${fetch("named by")}\n` +
-        `**Boiling Point**: ${fetch("boil")}\n` +
-        `**Melting Point**: ${fetch("melt")}\n` +
-        `**Molar Heat**: ${fetch("molar_heat")}\n` +
-        `**Electron Shells**: ${fetch("shells")}\n` +
-        `**Electronegativity**: ${fetch("electronegativity_pauling")}\n` +
-        `**Electron Affinity**: ${fetch("element.electron_affinity")}\n` +
-        `**Ionization Energies**: ${fetch("ionization_energies")}\n\n` +
-        `**Learn more:** [RSC](${rsclink}) | [PubChem](${pbclink}) | [NIST](${nistlink})`,
+        `**Mass**: ${element.getPropertyString("mass")} | ` +
+        `**Phase at STP**: ${element.getPropertyString("phase")}\n` +
+        `**Period**: ${element.getPropertyString("period")} | ` +
+        `**Group**: ${element.getPropertyString("group")} | ` +
+        `**Block**: ${element.getPropertyString("block")}\n` +
+        `**Density**: ${element.getPropertyString("density")}\n` +
+        `**Category**: ${element.getPropertyString("categ")}\n` +
+        `**Discovered By**: ${element.getPropertyString("discoverer")}\n` +
+        `**Named by**: ${element.getPropertyString("namer")}\n` +
+        `**Boiling Point**: ${element.getPropertyString("boil")}\n` +
+        `**Melting Point**: ${element.getPropertyString("melt")}\n` +
+        `**Molar Heat**: ${element.getPropertyString("heat")}\n` +
+        `**Electron Shells**: ${element.getPropertyString("shells")}\n` +
+        `**Electronegativity**: ${element.getPropertyString("negativity")}\n` +
+        `**Electron Affinity**: ${element.getPropertyString("affinity")}\n` +
+        `**Ionization Energies**: ${element.getPropertyString("energies")}\n` +
+        `**Learn more:** [RSC](${element.rsclink}) | [PubChem](${element.pbclink}) | [NIST](${element.nstlink})`,
       footer: {
-        text: fetch("electron_configuration"),
+        text: element.getPropertyString("conf"),
       },
     },
   };
@@ -58,14 +54,13 @@ const func = async (
   client: Client
 ): Promise<Message | void> => {
   if (args.length < 1) return;
-  const element = table.getElementByQuery(args[0]);
+  const element = fullTable.getElement(args[0]);
   return await msg.channel.createMessage(
     element
       ? elemEmbed(element)
       : {
-          // error message if element is not found
           embed: {
-            color: util.colorOf("help"), // to replace with client.config.colors.usage
+            color: util.colorOf("help"),
             title: "Element not found.",
             description: `There are no elements with this name, symbol, or number: \`${args[0]}\``,
           },

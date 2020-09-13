@@ -59,33 +59,32 @@ exports.full = void 0;
 var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
 var util = __importStar(require("../modules/util"));
-var table = __importStar(require("../modules/tableQuery"));
+var Table_1 = require("../modules/Table");
 var elemEmbed = function (element) {
-    var fetch = function (prop) { return table.getProperty(element, prop); };
-    var rsclink = "https://www.rsc.org/periodic-table/element/" + fetch("number");
-    var pbclink = "https://pubchem.ncbi.nlm.nih.gov/element/" + fetch("number");
-    var nistlink = "https://webbook.nist.gov/cgi/inchi/InChI%3D1S/" + fetch("symbol");
     return {
         embed: {
-            title: fetch("number") + " | " + fetch("name") + " (" + fetch("symbol") + ")",
-            url: fetch("source"),
-            color: util.colorOf(fetch("category")),
-            description: "**Mass**: " + fetch("atomic_mass") + " | **Phase at STP**: " + fetch("phase") + "\n" +
-                ("**Period**: " + fetch("period") + " | **Group**: " + fetch("group") + " | **Block**: " + fetch("block") + "\n") +
-                ("**Density**: " + fetch("density") + "\n") +
-                ("**Category**: " + fetch("category") + "\n") +
-                ("**Discovered By**: " + fetch("discovered_by") + "\n") +
-                ("**Named by**: " + fetch("named by") + "\n") +
-                ("**Boiling Point**: " + fetch("boil") + "\n") +
-                ("**Melting Point**: " + fetch("melt") + "\n") +
-                ("**Molar Heat**: " + fetch("molar_heat") + "\n") +
-                ("**Electron Shells**: " + fetch("shells") + "\n") +
-                ("**Electronegativity**: " + fetch("electronegativity_pauling") + "\n") +
-                ("**Electron Affinity**: " + fetch("element.electron_affinity") + "\n") +
-                ("**Ionization Energies**: " + fetch("ionization_energies") + "\n\n") +
-                ("**Learn more:** [RSC](" + rsclink + ") | [PubChem](" + pbclink + ") | [NIST](" + nistlink + ")"),
+            title: element.getPropertyString("number") + " | " + element.getPropertyString("name") + " (" + element.getPropertyString("symbol") + ")",
+            url: element.getPropertyString("source"),
+            color: util.colorOf(element.getPropertyString("categ")),
+            description: "**Mass**: " + element.getPropertyString("mass") + " | " +
+                ("**Phase at STP**: " + element.getPropertyString("phase") + "\n") +
+                ("**Period**: " + element.getPropertyString("period") + " | ") +
+                ("**Group**: " + element.getPropertyString("group") + " | ") +
+                ("**Block**: " + element.getPropertyString("block") + "\n") +
+                ("**Density**: " + element.getPropertyString("density") + "\n") +
+                ("**Category**: " + element.getPropertyString("categ") + "\n") +
+                ("**Discovered By**: " + element.getPropertyString("discoverer") + "\n") +
+                ("**Named by**: " + element.getPropertyString("namer") + "\n") +
+                ("**Boiling Point**: " + element.getPropertyString("boil") + "\n") +
+                ("**Melting Point**: " + element.getPropertyString("melt") + "\n") +
+                ("**Molar Heat**: " + element.getPropertyString("heat") + "\n") +
+                ("**Electron Shells**: " + element.getPropertyString("shells") + "\n") +
+                ("**Electronegativity**: " + element.getPropertyString("negativity") + "\n") +
+                ("**Electron Affinity**: " + element.getPropertyString("affinity") + "\n") +
+                ("**Ionization Energies**: " + element.getPropertyString("energies") + "\n") +
+                ("**Learn more:** [RSC](" + element.rsclink + ") | [PubChem](" + element.pbclink + ") | [NIST](" + element.nstlink + ")"),
             footer: {
-                text: fetch("electron_configuration"),
+                text: element.getPropertyString("conf"),
             },
         },
     };
@@ -104,11 +103,10 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
             case 0:
                 if (args.length < 1)
                     return [2 /*return*/];
-                element = table.getElementByQuery(args[0]);
+                element = Table_1.fullTable.getElement(args[0]);
                 return [4 /*yield*/, msg.channel.createMessage(element
                         ? elemEmbed(element)
                         : {
-                            // error message if element is not found
                             embed: {
                                 color: util.colorOf("help"),
                                 title: "Element not found.",

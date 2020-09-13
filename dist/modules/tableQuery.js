@@ -18,6 +18,33 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getList = exports.isPassAllFilters = exports.filterCheck = exports.parseFilters = exports.getProperty = exports.getBlock = exports.getGroup = exports.getPropUnit = exports.getMaxZ = exports.getElementByQuery = exports.getElementWithProp = exports.getElementWithName = void 0;
 //=========================================================//
@@ -124,25 +151,34 @@ var keywords = {
 };
 var rangeables = ["period", "group", "num", "neg", "aff", "den", "bp", "mp", "heat"];
 exports.parseFilters = function (args) {
-    var _a;
+    var e_1, _a, _b;
     var filterStrings = args.join(" ").split(",");
     var filters = [];
-    for (var _i = 0, filterStrings_1 = filterStrings; _i < filterStrings_1.length; _i++) {
-        var f = filterStrings_1[_i];
-        var _b = f.split("="), key = _b[0], val = _b[1];
-        _a = [key ? key.trim() : "", val ? val.trim() : ""], key = _a[0], val = _a[1];
-        filters.push({
-            property: keywords[key],
-            value: val,
-            range: rangeables.includes(key) && val.includes("to")
-        });
+    try {
+        for (var filterStrings_1 = __values(filterStrings), filterStrings_1_1 = filterStrings_1.next(); !filterStrings_1_1.done; filterStrings_1_1 = filterStrings_1.next()) {
+            var f = filterStrings_1_1.value;
+            var _c = __read(f.split("="), 2), key = _c[0], val = _c[1];
+            _b = __read([key ? key.trim() : "", val ? val.trim() : ""], 2), key = _b[0], val = _b[1];
+            filters.push({
+                property: keywords[key],
+                value: val,
+                range: rangeables.includes(key) && val.includes("to")
+            });
+        }
+    }
+    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+    finally {
+        try {
+            if (filterStrings_1_1 && !filterStrings_1_1.done && (_a = filterStrings_1.return)) _a.call(filterStrings_1);
+        }
+        finally { if (e_1) throw e_1.error; }
     }
     return filters;
 };
 exports.filterCheck = function (filter, element) {
     var val = exports.getProperty(element, filter.property);
     if (filter.range && val && !isNaN(Number(val))) {
-        var _a = filter.value.split("to").map(function (n) { return Number(n.trim()); }), min = _a[0], max = _a[1];
+        var _a = __read(filter.value.split("to").map(function (n) { return Number(n.trim()); }), 2), min = _a[0], max = _a[1];
         return min <= Number(val) && max >= Number(val);
     }
     if (typeof val === "number")
@@ -154,10 +190,20 @@ exports.filterCheck = function (filter, element) {
     return val === filter.value;
 };
 exports.isPassAllFilters = function (filters, element) {
-    for (var _i = 0, filters_1 = filters; _i < filters_1.length; _i++) {
-        var f = filters_1[_i];
-        if (!exports.filterCheck(f, element))
-            return false;
+    var e_2, _a;
+    try {
+        for (var filters_1 = __values(filters), filters_1_1 = filters_1.next(); !filters_1_1.done; filters_1_1 = filters_1.next()) {
+            var f = filters_1_1.value;
+            if (!exports.filterCheck(f, element))
+                return false;
+        }
+    }
+    catch (e_2_1) { e_2 = { error: e_2_1 }; }
+    finally {
+        try {
+            if (filters_1_1 && !filters_1_1.done && (_a = filters_1.return)) _a.call(filters_1);
+        }
+        finally { if (e_2) throw e_2.error; }
     }
     return true;
 };

@@ -8,7 +8,6 @@ bot.on("ready", () => {
   console.log("Bot connected.");
 });
 
-// message handler
 bot.on("messageCreate", async (msg: Message) => {
   if (msg.author.bot) return;
 

@@ -54,6 +54,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.cmd = void 0;
 var Command_1 = require("../modules/Command");
@@ -64,23 +75,33 @@ var config = __importStar(require("../config.json"));
 var names = ["commands"];
 var desc = ["Gives a list of available commands for the bot."];
 var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 0, function () {
-    var main, props, _i, _a, cmd_1;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var main, props, _a, _b, cmd_1;
+    var e_1, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 main = "";
                 props = "";
-                for (_i = 0, _a = index_1.commands.arr; _i < _a.length; _i++) {
-                    cmd_1 = _a[_i];
-                    if (cmd_1 instanceof PropertyCommand_1.PropertyCommand) {
-                        props += "`" + (config.prefix + cmd_1.names[0]) + "` | ";
+                try {
+                    for (_a = __values(index_1.commands.arr), _b = _a.next(); !_b.done; _b = _a.next()) {
+                        cmd_1 = _b.value;
+                        if (cmd_1 instanceof PropertyCommand_1.PropertyCommand) {
+                            props += "`" + (config.prefix + cmd_1.names[0]) + "` | ";
+                        }
+                        else {
+                            main += "`" + (config.prefix + cmd_1.names[0]);
+                            if (cmd_1.usage)
+                                main += " " + cmd_1.usage;
+                            main += "` | " + cmd_1.desc[0] + "\n";
+                        }
                     }
-                    else {
-                        main += "`" + (config.prefix + cmd_1.names[0]);
-                        if (cmd_1.usage)
-                            main += " " + cmd_1.usage;
-                        main += "` | " + cmd_1.desc[0] + "\n";
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (_b && !_b.done && (_c = _a.return)) _c.call(_a);
                     }
+                    finally { if (e_1) throw e_1.error; }
                 }
                 return [4 /*yield*/, msg.channel.createMessage({
                         embed: {
@@ -95,7 +116,7 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
                             ],
                         },
                     })];
-            case 1: return [2 /*return*/, _b.sent()];
+            case 1: return [2 /*return*/, _d.sent()];
         }
     });
 }); };

@@ -2,31 +2,53 @@ import { Client, Message } from "eris";
 import { Command } from "../modules/Command";
 import * as config from "../config.json";
 import * as util from "../modules/util";
-import * as table from "../modules/tableQuery";
+import { Element } from "../modules/Element";
+import { fullTable } from "../modules/Table";
 
-const elemEmbed = (element: table.Element) => {
-  const fetch = (prop: string) => table.getProperty(element, prop);
+const elemEmbed = (element: Element) => {
   return {
     embed: {
-      title: fetch("name"),
-      description: fetch("summary"),
-      url: fetch("source"),
-      color: util.colorOf(fetch("category")),
+      title: element.getPropertyString("name"),
+      description: element.getPropertyString("summary"),
+      url: element.getPropertyString("source"),
+      color: util.colorOf(element.getPropertyString("categ")),
       thumbnail: {
-        url: `https://images-of-elements.com/${fetch(
-          "name"
-        ).toLowerCase()}.jpg`,
+        url: element.imglink.substring(0, element.imglink.length - 4) + ".jpg",
       },
       fields: [
-        { name: "Symbol", value: fetch("symbol"), inline: true },
-        { name: "Number", value: fetch("number"), inline: true },
-        { name: "Mass", value: fetch("atomic_mass") + " u", inline: true },
-        { name: "Period", value: fetch("period"), inline: true },
-        { name: "Group", value: fetch("group"), inline: true },
-        { name: "Category", value: fetch("category"), inline: true },
+        {
+          name: "Symbol",
+          value: element.getPropertyString("symbol"),
+          inline: true,
+        },
+        {
+          name: "Number",
+          value: element.getPropertyString("number"),
+          inline: true,
+        },
+        {
+          name: "Mass",
+          value: element.getPropertyString("atomic_mass"),
+          inline: true,
+        },
+        {
+          name: "Period",
+          value: element.getPropertyString("period"),
+          inline: true,
+        },
+        {
+          name: "Group",
+          value: element.getPropertyString("group"),
+          inline: true,
+        },
+        {
+          name: "Category",
+          value: element.getPropertyString("category"),
+          inline: true,
+        },
       ],
       footer: {
-        text: fetch("electron_configuration_semantic"),
+        text: element.getPropertyString("sconf"),
       },
     },
   };
@@ -46,14 +68,13 @@ const func = async (
   client: Client
 ): Promise<Message | void> => {
   if (args.length < 1) return;
-  const element = table.getElementByQuery(args[0]);
+  const element = fullTable.getElement(args[0]);
   return await msg.channel.createMessage(
     element
       ? elemEmbed(element)
       : {
-          // error message if element is not found
           embed: {
-            color: util.colorOf("help"), // to replace with client.config.colors.usage
+            color: util.colorOf("help"),
             title: "Element not found.",
             description: `There are no elements with this name, symbol, or number: \`${args[0]}\``,
           },

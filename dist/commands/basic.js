@@ -59,28 +59,51 @@ exports.basic = void 0;
 var Command_1 = require("../modules/Command");
 var config = __importStar(require("../config.json"));
 var util = __importStar(require("../modules/util"));
-var table = __importStar(require("../modules/tableQuery"));
+var Table_1 = require("../modules/Table");
 var elemEmbed = function (element) {
-    var fetch = function (prop) { return table.getProperty(element, prop); };
     return {
         embed: {
-            title: fetch("name"),
-            description: fetch("summary"),
-            url: fetch("source"),
-            color: util.colorOf(fetch("category")),
+            title: element.getPropertyString("name"),
+            description: element.getPropertyString("summary"),
+            url: element.getPropertyString("source"),
+            color: util.colorOf(element.getPropertyString("categ")),
             thumbnail: {
-                url: "https://images-of-elements.com/" + fetch("name").toLowerCase() + ".jpg",
+                url: element.imglink.substring(0, element.imglink.length - 4) + ".jpg",
             },
             fields: [
-                { name: "Symbol", value: fetch("symbol"), inline: true },
-                { name: "Number", value: fetch("number"), inline: true },
-                { name: "Mass", value: fetch("atomic_mass") + " u", inline: true },
-                { name: "Period", value: fetch("period"), inline: true },
-                { name: "Group", value: fetch("group"), inline: true },
-                { name: "Category", value: fetch("category"), inline: true },
+                {
+                    name: "Symbol",
+                    value: element.getPropertyString("symbol"),
+                    inline: true,
+                },
+                {
+                    name: "Number",
+                    value: element.getPropertyString("number"),
+                    inline: true,
+                },
+                {
+                    name: "Mass",
+                    value: element.getPropertyString("atomic_mass"),
+                    inline: true,
+                },
+                {
+                    name: "Period",
+                    value: element.getPropertyString("period"),
+                    inline: true,
+                },
+                {
+                    name: "Group",
+                    value: element.getPropertyString("group"),
+                    inline: true,
+                },
+                {
+                    name: "Category",
+                    value: element.getPropertyString("category"),
+                    inline: true,
+                },
             ],
             footer: {
-                text: fetch("electron_configuration_semantic"),
+                text: element.getPropertyString("sconf"),
             },
         },
     };
@@ -99,11 +122,10 @@ var func = function (args, msg, client) { return __awaiter(void 0, void 0, void 
             case 0:
                 if (args.length < 1)
                     return [2 /*return*/];
-                element = table.getElementByQuery(args[0]);
+                element = Table_1.fullTable.getElement(args[0]);
                 return [4 /*yield*/, msg.channel.createMessage(element
                         ? elemEmbed(element)
                         : {
-                            // error message if element is not found
                             embed: {
                                 color: util.colorOf("help"),
                                 title: "Element not found.",
