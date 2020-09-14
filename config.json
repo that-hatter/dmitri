@@ -1,8 +1,9 @@
 {
-  "token": "NzQ0MDczMzg4MDM2OTgwNzU4.Xzd6Vw.XYL71o2_Okg6VPscpTez2p-pMeg",
-  "prefix": ";",
-  "owners": ["552404323301195777"],
+  "token": "" /* the bot's unique [and secret] token */,
+  "prefix": ";" /* the prefix for bot commands, `;` is the default */,
+  "owners": [] /* add owner discord IDs here as an array of strings */,
   "colors": {
+    /* you can customize the embed colors here */
     "help": "0xFFFEFF",
     "diatomic nonmetal": "0xFF00FF",
     "noble gas": "0x800080",
