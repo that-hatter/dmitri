@@ -3,7 +3,7 @@ import { Command } from "../modules/Command";
 import * as config from "../config.json";
 import * as util from "../modules/util";
 import { Element } from "../modules/Element";
-import { fullTable } from "../modules/Table";
+import { periodic } from "../modules/Table";
 
 const elemEmbed = (element: Element) => {
   return {
@@ -28,7 +28,7 @@ const elemEmbed = (element: Element) => {
         },
         {
           name: "Mass",
-          value: element.getPropertyString("atomic_mass"),
+          value: element.getPropertyString("mass"),
           inline: true,
         },
         {
@@ -43,7 +43,7 @@ const elemEmbed = (element: Element) => {
         },
         {
           name: "Category",
-          value: element.getPropertyString("category"),
+          value: element.getPropertyString("categ"),
           inline: true,
         },
       ],
@@ -68,7 +68,7 @@ const func = async (
   client: Client
 ): Promise<Message | void> => {
   if (args.length < 1) return;
-  const element = fullTable.getElement(args[0]);
+  const element = periodic.getElement(args[0]);
   return await msg.channel.createMessage(
     element
       ? elemEmbed(element)

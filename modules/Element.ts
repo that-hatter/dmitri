@@ -1,4 +1,5 @@
 import * as elements from "../data/elements.json";
+import { Filter } from "./util";
 
 type Propertyof<T> = T[keyof T];
 export type ElemPropName = keyof Element;
@@ -84,19 +85,19 @@ export class Element {
   }
 
   public getPropUnit = (prop: string): string | void => {
-    if (prop === "atomic_mass") return "u";
-    if (prop === "molar_heat") return "mol-K";
+    if (prop === "mass") return "u";
+    if (prop === "heat") return "mol-K";
     if (prop === "boil" || prop === "melt") return "K";
     if (prop === "density") return this.phase === "Gas" ? "g/L" : "g/cm³";
   };
 
   public getPropertyString(prop: string): string {
     if (prop === "links") {
-      return `[The Royal Society of Chemestry](${this.rsclink})
+      return `
+        [The Royal Society of Chemestry](${this.rsclink})
         [PubChem](${this.pbclink})
         [NIST Chemistry Webbook](${this.nstlink})
-        [Chemical Elements: A Virtual Museum](${this.imglink})
-        `;
+        [Chemical Elements: A Virtual Museum](${this.imglink})`;
     }
     const val: ElemPropVal = this[prop as ElemPropName];
     if (val) {
@@ -107,5 +108,31 @@ export class Element {
       return unit ? val + " " + unit : String(val);
     }
     return "`N/A`";
+  }
+
+  public filterCheck(filter: Filter): boolean {
+    const val = this[filter.prop as ElemPropName];
+    if (val) {
+      if (typeof val === "number" && typeof filter.val1 === "number") {
+        return filter.val2 !== undefined
+          ? val >= filter.val1 && val <= filter.val2
+          : val === filter.val1;
+      } else if (typeof val === "string" && typeof filter.val1 === "string") {
+        return (
+          val.toLowerCase() === filter.val1.toLowerCase() ||
+          (filter.prop === "categ" &&
+            filter.val1 === "unknown" &&
+            val.startsWith("unknown"))
+        );
+      }
+    }
+    return false;
+  }
+
+  public isPassAllFilters(filters: Filter[]): boolean {
+    for (const f of filters) {
+      if (!this.filterCheck(f)) return false;
+    }
+    return true;
   }
 }

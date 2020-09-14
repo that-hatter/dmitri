@@ -2,8 +2,8 @@ import { Client, Message } from "eris";
 import { Command } from "../modules/Command";
 import { basic } from "./basic";
 import * as util from "../modules/util";
-import * as table from "../modules/tableQuery";
 import * as config from "../config.json";
+import { periodic } from "../modules/Table";
 
 const names = ["rand", "random"];
 const desc = [
@@ -17,13 +17,11 @@ const func = async (
   msg: Message,
   client: Client
 ): Promise<Message | void> => {
-  const filters: table.Filter[] =
-    args.length > 0 ? table.parseFilters(args) : [];
-  const list = table.getList(filters);
+  const filters: util.Filter[] = args.length > 0 ? util.parseFilters(args) : [];
+  const randEl = periodic.newFiltered(filters).getRandom();
 
-  const randEl = list[Math.floor(Math.random() * (list.length - 1))];
-  return list.length > 0
-    ? await basic.exec([randEl.name.toLowerCase()], msg, client)
+  return randEl && randEl.name
+    ? await basic.exec([randEl.name], msg, client)
     : await msg.channel.createMessage({
         embed: {
           color: util.colorOf("help"),

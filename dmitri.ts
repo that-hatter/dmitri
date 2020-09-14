@@ -5,7 +5,7 @@ import * as util from "./modules/util";
 const bot = new Client(token);
 
 bot.on("ready", () => {
-  console.log("Bot connected.");
+  console.log("Connected!");
 });
 
 bot.on("messageCreate", async (msg: Message) => {

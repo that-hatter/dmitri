@@ -71,7 +71,7 @@ var config_json_1 = require("./config.json");
 var util = __importStar(require("./modules/util"));
 var bot = new eris_1.Client(config_json_1.token);
 bot.on("ready", function () {
-    console.log("Bot connected.");
+    console.log("Connected!");
 });
 bot.on("messageCreate", function (msg) { return __awaiter(void 0, void 0, void 0, function () {
     var args, cmd, err_1, _a, _b, m, cmd, err_2, e_1_1;

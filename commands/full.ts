@@ -3,7 +3,7 @@ import { Command } from "../modules/Command";
 import { Element } from "../modules/Element";
 import * as config from "../config.json";
 import * as util from "../modules/util";
-import { fullTable } from "../modules/Table";
+import { periodic } from "../modules/Table";
 
 const elemEmbed = (element: Element) => {
   return {
@@ -54,7 +54,7 @@ const func = async (
   client: Client
 ): Promise<Message | void> => {
   if (args.length < 1) return;
-  const element = fullTable.getElement(args[0]);
+  const element = periodic.getElement(args[0]);
   return await msg.channel.createMessage(
     element
       ? elemEmbed(element)
