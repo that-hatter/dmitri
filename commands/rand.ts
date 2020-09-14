@@ -21,7 +21,7 @@ const func = async (
   const randEl = periodic.newFiltered(filters).getRandom();
 
   return randEl && randEl.name
-    ? await basic.exec([randEl.name], msg, client)
+    ? await basic.exec([randEl.name.toLowerCase()], msg, client)
     : await msg.channel.createMessage({
         embed: {
           color: util.colorOf("help"),

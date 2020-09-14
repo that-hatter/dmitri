@@ -20,7 +20,7 @@ export class Table {
           const raw = data[name as keyof typeof data];
           if (raw && raw.name && raw.number) {
             const element = new Element(raw);
-            this.elements.set(element.name || "", element);
+            this.elements.set(element.name?.toLowerCase() || "", element);
           }
         }
       }
@@ -32,7 +32,7 @@ export class Table {
   };
 
   public getElementByName = (name: string): Element | void => {
-    return this.elements.get(name);
+    return this.elements.get(name.toLowerCase());
   };
 
   public getElementByProp = (
