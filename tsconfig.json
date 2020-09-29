@@ -12,5 +12,6 @@
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "outDir": "./dist"
-  }
+  },
+  "compileOnSave": true
 }
